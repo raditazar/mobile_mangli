@@ -10,6 +10,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.navigation.Screen
 import ui.screens.LoginScreen
 import ui.viewmodel.AuthViewModel
+import ui.screens.DashboardScreen
+import ui.viewmodel.DashboardViewModel
 
 @Composable
 fun App() {
@@ -18,6 +20,7 @@ fun App() {
     }
 
     val authViewModel: AuthViewModel = viewModel()
+    val dashboardViewModel: DashboardViewModel = viewModel()
     MaterialTheme {
         when (currentScreen){
             is Screen.Login -> {
@@ -29,7 +32,13 @@ fun App() {
                 )
             }
             is Screen.Dashboard -> {
-            
+                DashboardScreen(
+                    viewModel = dashboardViewModel,
+                    admin = authViewModel.currentAdmin,
+                    onNavigate = { screen ->
+                        currentScreen = screen
+                    }
+                )
             }
             is Screen.Scanner -> {
 
