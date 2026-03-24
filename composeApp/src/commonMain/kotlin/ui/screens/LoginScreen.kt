@@ -12,6 +12,7 @@ import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,19 +22,25 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ui.viewmodel.AuthViewModel
 
 @Composable
 fun LoginScreen(
+    viewModel: AuthViewModel,
     onLoginSuccess: () -> Unit,
 ){
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
-    var isLoading by remember { mutableStateOf(false) }
-
     val colorPrimaryDark = Color(0xFF112D4E)
     val colorPrimary = Color(0xFF3F72AF)
     val colorBackground = Color(0xFFF9F7F7)
+
+    LaunchedEffect(viewModel.isLoggedIn){
+        if(viewModel.isLoggedIn){
+            onLoginSuccess()
+        }
+    }
 
     Column (
         modifier = Modifier
@@ -113,11 +120,20 @@ fun LoginScreen(
 
         Spacer(modifier = Modifier.height(32.dp))
 
+        viewModel.errorMessage?.let{
+            error ->
+                Text(
+                    text = error,
+                    color = MaterialTheme.colorScheme.error,
+                    fontSize = 14.sp,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+        }
+
         // Login Button
         Button(
             onClick = {
-                // Handle login logic here
-                isLoading = true
+                viewModel.login(email, password)
             },
             modifier = Modifier
                 .fillMaxWidth()
@@ -125,9 +141,9 @@ fun LoginScreen(
             shape = RoundedCornerShape(12.dp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorPrimary),
-            enabled = email.isNotBlank() && password.isNotBlank() && !isLoading
+            enabled = email.isNotBlank() && password.isNotBlank() && !viewModel.isLoading
         ){
-            if (isLoading) {
+            if (viewModel.isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier.size(24.dp),
                     color = Color.White,
