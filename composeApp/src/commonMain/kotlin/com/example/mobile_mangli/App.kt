@@ -13,6 +13,7 @@ import ui.screens.LoginScreen
 import ui.screens.PosScreen
 import ui.screens.ScannerScreen
 import ui.screens.PackageScreen
+import ui.screens.ProfileScreen
 import ui.viewmodel.AuthViewModel
 import ui.viewmodel.DashboardViewModel
 import ui.viewmodel.PackageViewModel
@@ -63,7 +64,18 @@ fun App() {
                         onBack = { currentScreen = Screen.Dashboard }
                 )
             }
-            is Screen.Profile -> {}
+            is Screen.Profile -> {
+                ProfileScreen(
+                    admin = authViewModel.currentAdmin, 
+                    onNavigate = {screen ->
+                        currentScreen = screen
+                    },
+                    onLogout = {
+                        authViewModel.logout()
+                        currentScreen = Screen.Login
+                    }
+                )
+            }
         }
     }
 }

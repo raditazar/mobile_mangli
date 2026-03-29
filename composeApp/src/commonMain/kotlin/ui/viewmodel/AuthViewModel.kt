@@ -40,7 +40,7 @@ class AuthViewModel : ViewModel() {
 
     // Logout
     fun logout(){
-        ApiClient.token = null
+        data.api.ApiClient.token = null
         currentAdmin = null
         isLoggedIn = false
     }
