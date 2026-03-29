@@ -6,4 +6,5 @@ sealed class Screen{
     data object Scanner: Screen()
     data object Pos: Screen()
     data object Profile: Screen()
+    data object PackageManagement: Screen()
 }

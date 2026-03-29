@@ -91,3 +91,39 @@ data class CashPaymentResponse(
     val success: Boolean,
     val message: String? = null
 )
+
+// Create Package
+@Serializable
+data class CreatePackageRequest(
+    val name: String,
+    val slug: String,
+    val description: String,
+    @SerialName("duration_days")
+    val durationDays: Int,
+    @SerialName("max_participants")
+    val maxParticipants: Int,
+    val location: String,
+    @SerialName("available_days")
+    val availableDays: List<Int> = listOf(0,1,2,3,4,5,6), 
+    @SerialName("is_active")
+    val isActive: Boolean,
+)
+
+// Create Price
+@Serializable
+data class CreatePriceRequest(
+    @SerialName("tour_package_id")
+    val tourPackageId: String,
+    val name: String,
+    val price: Double,
+    @SerialName("discount_price")
+    val discountPrice: Double? = null,
+    @SerialName("is_active")
+    val isActive: Boolean
+)
+
+@Serializable
+data class GenericResponse(
+    val success: Boolean,
+    val message: String? = null
+)

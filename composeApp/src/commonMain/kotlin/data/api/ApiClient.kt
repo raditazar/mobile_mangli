@@ -58,4 +58,34 @@ object ApiClient {
                 }
                 .body()
     }
+
+    // PUT Request
+    suspend inline fun <reified T> put(endpoint: String, body: Any) : T{
+        val response = client.put("$BASE_URL$endpoint"){
+            contentType(ContentType.Application.Json)
+            setBody(body)
+            token?.let{
+                bearerAuth(it)
+            }
+        }
+        if (response.status.value !in 200..299){
+            val errorBody = response.bodyAsText()
+            throw Exception("Request gagal: $errorBody")
+        }
+        return response.body()
+    }
+
+    // DELETE Request
+    suspend inline fun <reified T> delete(endpoint: String) : T{
+        val response = client.delete("$BASE_URL$endpoint"){
+            token?.let{
+                bearerAuth(it)
+            }
+        }
+        if (response.status.value !in 200..299){
+            val errorBody = response.bodyAsText()
+            throw Exception("Request gagal: $errorBody")
+        }
+        return response.body()
+    }
 }

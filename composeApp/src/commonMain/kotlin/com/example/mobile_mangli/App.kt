@@ -12,8 +12,10 @@ import ui.screens.DashboardScreen
 import ui.screens.LoginScreen
 import ui.screens.PosScreen
 import ui.screens.ScannerScreen
+import ui.screens.PackageScreen
 import ui.viewmodel.AuthViewModel
 import ui.viewmodel.DashboardViewModel
+import ui.viewmodel.PackageViewModel
 import ui.viewmodel.PosViewModel
 import ui.viewmodel.ScannerViewModel
 
@@ -25,6 +27,7 @@ fun App() {
     val dashboardViewModel: DashboardViewModel = viewModel()
     val scannerViewModel: ScannerViewModel = viewModel()
     val posViewModel: PosViewModel = viewModel()
+    val packageViewModel: PackageViewModel = viewModel()
     MaterialTheme {
         when (currentScreen) {
             is Screen.Login -> {
@@ -52,6 +55,12 @@ fun App() {
                         viewModel = posViewModel,
                         admin = authViewModel.currentAdmin,
                         onNavigate = { screen -> currentScreen = screen }
+                )
+            }
+            is Screen.PackageManagement -> {
+                PackageScreen(
+                        viewModel = packageViewModel,
+                        onBack = { currentScreen = Screen.Dashboard }
                 )
             }
             is Screen.Profile -> {}
